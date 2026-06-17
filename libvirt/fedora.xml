@@ -48,7 +48,7 @@
   <devices>
     <emulator>/app/lib/extensions/bin/qemu-system-x86_64</emulator>
     <disk type="file" device="disk">
-      <driver name="qemu" type="qcow2" cache="writeback" io="threads" discard="unmap"/>
+      <driver name="qemu" type="qcow2" cache="writeback" io="threads" discard="unmap" iothread="1" queues="4"/>
       <source file="/var/home/dhodyn/.var/app/org.virt_manager.virt-manager/data/images/fedora.qcow2"/>
       <backingStore/>
       <target dev="vda" bus="virtio"/>
