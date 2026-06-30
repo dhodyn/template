@@ -5,6 +5,8 @@ trap cleanup SIGINT SIGTERM ERR EXIT
 
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd -P)
 TMP_DIR="$(mktemp -d)"
+source "${SCRIPT_DIR}/lib/colours.sh"
+source "${SCRIPT_DIR}/lib/logging.sh"
 
 usage() {
 	cat <<EOF
@@ -25,26 +27,6 @@ EOF
 cleanup() {
 	trap - SIGINT SIGTERM ERR EXIT
 	rm -rf "${TMP_DIR}"
-}
-
-setup_colors() {
-	if [[ -t 2 ]] && [[ -z "${NO_COLOR-}" ]] && [[ "${TERM-}" != "dumb" ]]; then
-        	NOFORMAT="$(tput sgr0)" 
-		BLACK="$(tput setaf 0)" RED="$(tput setaf 1)" GREEN="$(tput setaf 2)"
-		YELLOW="$(tput setaf 3)" BLUE="$(tput setaf 4)" PURPLE="$(tput setaf 5)"
-		CYAN="$(tput setaf 6)" WHITE="$(tput setaf 7)" GREY="$(tput setaf 0)"
-		LRED="$(tput setaf 1)" LGREEN="$(tput setaf 2)" LYELLOW="$(tput setaf 3)"
-		LBLUE="$(tput setaf 4)" LPURPLE="$(tput setaf 5)" LCYAN="$(tput setaf 6)"
-		LWHITE="$(tput setaf 7)"
-	else
-		NOFORMAT=''
-		BLACK='' RED='' GREEN=''
-		YELLOW='' BLUE='' PURPLE=''
-		CYAN='' WHITE='' GREY=''
-		LRED='' LGREEN='' LYELLOW=''
-		LBLUE='' LPURPLE='' LCYAN=''
-		LWHITE=''
-	fi
 }
 
 msg() {
@@ -89,11 +71,10 @@ parse_params() {
 }
 
 parse_params "$@"
-setup_colors
 
 # script logic here
 
-msg "${RED}Read parameters:${NOFORMAT}"
+msg "${RED}Read parameters:${RESET}"
 msg "- flag: ${FLAG}"
 msg "- param: ${PARAM}"
 msg "- arguments: ${ARGS[*]-}"
