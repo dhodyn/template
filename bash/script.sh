@@ -74,11 +74,12 @@ parse_params() {
     return 0
 }
 
+main() {
+    stderr "${RED}Read parameters:${RESET}"
+    stderr "- flag: ${FLAG}"
+    stderr "- param: ${PARAM}"
+    stderr "- arguments: ${ARGS[*]-}"
+}
+
 parse_params "$@"
-
-# script logic here
-
-stderr "${RED}Read parameters:${RESET}"
-stderr "- flag: ${FLAG}"
-stderr "- param: ${PARAM}"
-stderr "- arguments: ${ARGS[*]-}"
+main
