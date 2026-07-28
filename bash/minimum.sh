@@ -9,7 +9,7 @@ source "${SCRIPT_DIR}/lib/colours.sh"
 source "${SCRIPT_DIR}/lib/logging.sh"
 
 usage() {
-	cat <<EOF
+    cat <<EOF
 Usage: $(basename "${BASH_SOURCE[0]}") [-h] [-v] [-f] -p param_value arg1 [arg2...]
 
 Script description here.
@@ -21,60 +21,60 @@ Available options:
 -f, --flag      Some flag description
 -p, --param     Some param description
 EOF
-	exit
+    exit
 }
 
 cleanup() {
-	trap - SIGINT SIGTERM ERR EXIT
-	rm -rf "${TMP_DIR}"
+    trap - SIGINT SIGTERM ERR EXIT
+    rm -rf "${TMP_DIR}"
 }
 
-msg() {
-	echo >&2 -e "${1-}"
+stderr() {
+    echo >&2 -e "${1-}"
 }
 
 die() {
-	local MSG=$1
-	local CODE=${2-1} # default exit status 1
-	msg "${MSG}"
-	exit "${CODE}"
+    local message=$1
+    local exit_code=${2-1}  # default exit status 1
+    stderr "${message}"
+    exit "${exit_code}"
 }
 
 parse_params() {
-	# default values of variables set from params
-	FLAG=0
-	PARAM=''
+    # default values of variables set from params
+    FLAG=0
+    PARAM=''
 
-	while :; do
-		case "${1-}" in
-			-h | --help) usage ;;
-			-v | --verbose) set -x ;;
-			--no-color) NO_COLOR=1 ;;
-			-f | --flag) FLAG=1 ;; # example flag
-			-p | --param) # example named parameter
-				PARAM="${2-}"
-				shift
-				;;
-			-?*) die "Unknown option: $1" ;;
-			*) break ;;
-		esac
-		shift
-	done
+    while :; do
+        case "${1-}" in
+            -h | --help) usage ;;
+            -v | --verbose) set -x ;;
+            --no-color) NO_COLOR=1 ;;
+            -f | --flag) FLAG=1 ;;  # example flag
+            -p | --param)  # example named parameter
+                PARAM="${2-}"
+                shift
+                ;;
+            -?*) die "Unknown option: $1" ;;
+            *) break ;;
+        esac
+        shift
+    done
 
-	ARGS=("$@")
+    ARGS=("$@")
 
-	# check required params and arguments
-	[[ -z "${PARAM-}" ]] && die "Missing required parameter: param"
-	[[ ${#ARGS[@]} == 0 ]] && die "Missing script arguments"
+    # check required params and arguments
+    [[ -z "${PARAM-}" ]] && die "Missing required parameter: param"
+    [[ ${#ARGS[@]} == 0 ]] && die "Missing script arguments"
 
-	return 0
+    return 0
 }
 
 parse_params "$@"
 
 # script logic here
 
-msg "${RED}Read parameters:${RESET}"
-msg "- flag: ${FLAG}"
-msg "- param: ${PARAM}"
-msg "- arguments: ${ARGS[*]-}"
+stderr "${RED}Read parameters:${RESET}"
+stderr "- flag: ${FLAG}"
+stderr "- param: ${PARAM}"
+stderr "- arguments: ${ARGS[*]-}"
