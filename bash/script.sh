@@ -33,7 +33,7 @@ stderr() {
     echo >&2 -e "${1-}"
 }
 
-die() {
+terminate() {
     local message=$1
     local exit_code=${2-1}  # default exit status 1
     stderr "${message}"
@@ -55,7 +55,7 @@ parse_params() {
                 PARAM="${2-}"
                 shift
                 ;;
-            -?*) die "Unknown option: $1" ;;
+            -?*) terminate "Unknown option: $1" ;;
             *) break ;;
         esac
         shift
@@ -64,8 +64,8 @@ parse_params() {
     ARGS=("$@")
 
     # check required params and arguments
-    [[ -z "${PARAM-}" ]] && die "Missing required parameter: param"
-    [[ ${#ARGS[@]} == 0 ]] && die "Missing script arguments"
+    [[ -z "${PARAM-}" ]] && terminate "Missing required parameter: param"
+    [[ ${#ARGS[@]} == 0 ]] && terminate "Missing script arguments"
 
     return 0
 }
