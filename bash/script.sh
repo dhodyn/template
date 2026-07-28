@@ -29,6 +29,10 @@ cleanup() {
     rm -rf "${TMP_DIR}"
 }
 
+stdout() {
+    echo -e "${1-}"
+}
+
 stderr() {
     echo >&2 -e "${1-}"
 }
